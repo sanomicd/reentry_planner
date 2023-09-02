@@ -2,9 +2,9 @@ include("../Science/constants.jl")
 #Grab mercury reentry constants
 mercury_constants()
 
-using MATLABDiffEq, ParameterizedFunctions
+#using MATLABDiffEq, ParameterizedFunctions
 
-function ballistic_derivatives(t, state)
+function ballistic_derivatives(state, t)
     
     #State Vec
     V = state[1]
@@ -29,8 +29,15 @@ function ballistic_derivatives(t, state)
 
     #Return statedot
     statedot = [dVdt, dhdt, dγdt]
+    return statedot
 end
 
-function simp_derivative(t, state)
-    statedot = 2*state
+#TO TEST:
+function pend_derivative(state, t)
+    θ = state[1]
+    ω = state[2]
+    
+    statedot = [ω, (-0.25*ω) - (5*sin(θ))]
+    return statedot
 end
+

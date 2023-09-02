@@ -4,7 +4,9 @@ Script derived from: https://youtu.be/7BA7iVTRyO4?si=SoczBFJ0xGUhcaz9
 
 include("../Science/constants.jl")
 include("../Science/conversions.jl")
-
+include("numerical_derivative.jl")
+include("numerical_integration.jl")
+mercury_constants()
 
 m = 1350 #kg
 Cd = 1.5
@@ -15,14 +17,23 @@ ha = collect(range(0, he, 1000))
 
 V = Ve.*exp.((1 ./(2 .*β)).*(ρs ./sin.(γe)).*(S.*Cd./m).*exp.(-β.*ha))
 
-tout = collect(range(0, 10000, 10000000))
+tout = collect(range(0, 10000, 100000))
 r0 = 100000
 v0 = sqrt(2*G*m/r0)
-xinit = [r0, v0]
+xinit = [Ve; he; γe]
 
+# Pendulum test
+#y0 = [pi-0.1; 0.0]
+#t = collect(range(0, 10, 31))
+#sol = rk4(pend_derivative, y0, t)
 
-tspan = tout #collect(range(0.0, 10000.0, ))
-stateout = rk4(ballistic_derivatives, xinit, tspan)
+# Back to Mercury
 
+sol = rk4(ballistic_derivatives, xinit, tout)
 
+Vnum = sol[:,1]
+hnum = sol[:,2]
+γnum = sol[:,3]
 
+plot(ha, V, label="Analytical", title="Alt vs Velocity")
+plot!(hnum, Vnum, label="Numerical")
