@@ -1,6 +1,5 @@
 include("../Science/constants.jl")
 #Grab mercury reentry constants
-mercury_constants()
 
 #using MATLABDiffEq, ParameterizedFunctions
 

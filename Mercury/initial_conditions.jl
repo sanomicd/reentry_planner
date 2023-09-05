@@ -8,6 +8,15 @@ include("numerical_derivative.jl")
 include("numerical_integration.jl")
 mercury_constants()
 
+
+import Pkg
+if "Plots" in keys(Pkg.dependencies())
+    print("Plots installed")
+else
+    Pkg.add("Plots")
+end
+using Plots
+
 m = 1350 #kg
 Cd = 1.5
 Ve = 7500 #m/s
@@ -37,3 +46,5 @@ hnum = sol[:,2]
 
 plot(ha, V, label="Analytical", title="Alt vs Velocity")
 plot!(hnum, Vnum, label="Numerical")
+
+plot(tout, γnum.*1 ./deg2rad(), title="Flight Path Angle (deg)")
